@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小yi防红规则</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f9ff 0%, #f0f5ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            color: #555;
+        }
+        
+        .container {
+            width: 400px;
+            height: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(173, 216, 230, 0.15);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(173, 216, 230, 0.2);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #add8e6 0%, #87ceeb 100%);
+            padding: 15px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(240, 248, 255, 0.7);
+            border-bottom: 1px solid rgba(173, 216, 230, 0.3);
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #91d5ff;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #096dd9;
+            margin-bottom: 3px;
+        }
+        
+        .profile-motto {
+            font-size: 0.7rem;
+            color: #1890ff;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+        
+        .profile-intro {
+            font-size: 0.7rem;
+            color: #0050b3;
+            line-height: 1.3;
+        }
+        
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+            letter-spacing: 0.3px;
+        }
+        
+        .header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .content::-webkit-scrollbar {
+            width: 3px;
+        }
+        
+        .content::-webkit-scrollbar-track {
+            background: rgba(173, 216, 230, 0.1);
+            border-radius: 10px;
+        }
+        
+        .content::-webkit-scrollbar-thumb {
+            background: #87ceeb;
+            border-radius: 10px;
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4682b4;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 6px;
+            font-size: 1rem;
+        }
+        
+        .section-content {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            padding-left: 8px;
+        }
+        
+        .highlight {
+            color: #4682b4;
+            font-weight: 500;
+        }
+        
+        .price-list {
+            background: rgba(240, 248, 255, 0.5);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(173, 216, 230, 0.3);
+            font-size: 0.8rem;
+        }
+        
+        .price-item:last-child {
+            border-bottom: none;
+        }
+        
+        .agreement {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(240, 248, 255, 0.5);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .agreement:hover {
+            background: rgba(240, 248, 255, 0.8);
+        }
+        
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #87ceeb;
+            border-radius: 4px;
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .checkbox.checked {
+            background: #87ceeb;
+        }
+        
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .agreement-text {
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+        
+        .agreement-text a {
+            color: #4682b4;
+            text-decoration: none;
+        }
+        
+        .agreement-text a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #87ceeb 0%, #4682b4 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(70, 130, 180, 0.3);
+            letter-spacing: 0.3px;
+            margin-top: 10px;
+        }
+        
+        .btn:disabled {
+            background: #ddd;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+        }
+        
+        .btn:not(:disabled):active {
+            transform: translateY(1px);
+        }
+        
+        .platform-info {
+            margin-top: 15px;
+            background: rgba(240, 248, 255, 0.5);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(173, 216, 230, 0.3);
+            margin-bottom: 12px;
+        }
+        
+        .tab {
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .tab.active {
+            color: #4682b4;
+            border-bottom: 2px solid #4682b4;
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .skills-section {
+            margin-top: 15px;
+        }
+        
+        .skills-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #096dd9;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .skill {
+            background-color: #bae7ff;
+            color: #0050b3;
+            padding: 0.2rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            border: 1px solid #91d5ff;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(173, 216, 230, 0.3);
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #096dd9;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #1890ff;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.7rem;
+            color: #aaa;
+            background: rgba(240, 248, 255, 0.5);
+        }
+        
+        .click-effect {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(135,206,235,0) 70%);
+            pointer-events: none;
+            animation: ripple 0.6s linear forwards;
+            z-index: 10;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(70, 130, 180, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(70, 130, 180, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(70, 130, 180, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>小yi防红服务协议</h1>
+                <p>请仔细阅读并同意以下条款以继续使用</p>
+            </div>
+            
+            <div class="profile-section">
+                <img src="https://i.imgs.ovh/2025/11/25/CUPp1e.jpeg" alt="小yi科技头像" class="avatar">
+                <div class="profile-info">
+                    <div class="profile-name">小yi科技</div>
+                    <div class="profile-motto">"TG:@yishao0 海鸥:1216609"</div>
+                    <div class="profile-intro">小yi客服台搭建 防红制作 定制客服台与防红</div>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        服务条款
+                    </div>
+                    <div class="section-content">
+                        <p>防红白名单价格列表:</p>
+                        <div class="price-list">
+                            <div class="price-item">
+                                <span>七天白名单:</span>
+                                <span class="highlight">58</span>
+                            </div>
+                            <div class="price-item">
+                                <span>半个月白名单:</span>
+                                <span class="highlight">88</span>
+                            </div>
+                            <div class="price-item">
+                                <span>一个月白名单:</span>
+                                <span class="highlight">128</span>
+                            </div>
+                        </div>
+                        <p style="margin-top: 8px;">出现任何问题联系客服 <span class="highlight">@yishao0</span></p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-comments"></i>
+                        联系方式
+                    </div>
+                    <div class="section-content">
+                        <p>TG联系 <span class="highlight">@yishao0</span></p>
+                    </div>
+                </div>
+                
+                <div class="skills-section">
+                    <div class="skills-title">
+                        <i class="fas fa-code"></i>
+                        技能栈
+                    </div>
+                    <div class="skills">
+                        <span class="skill">HTML5</span>
+                        <span class="skill">CSS3</span>
+                        <span class="skill">JavaScript</span>
+                        <span class="skill">React</span>
+                        <span class="skill">Tailwind CSS</span>
+                        <span class="skill">UI/UX 设计</span>
+                        <span class="skill">响应式开发</span>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">80+</div>
+                            <div class="stat-label">项目完成</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">80+</div>
+                            <div class="stat-label">客户好评</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">8+</div>
+                            <div class="stat-label">技术栈</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="agreement">
+                    <div class="checkbox" id="agreeCheck"></div>
+                    <div class="agreement-text">
+                        我已阅读并联系小yi微信<a href="https://work.weixin.qq.com/ca/cawcded02ad9677043">点击此处联系</a> TG @yishao0
+                    </div>
+                </div>
+                
+                <button class="btn" id="nextStepBtn" disabled>下一步</button>
+                
+                <div class="platform-info">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="payment">支付方式</div>
+                        <div class="tab" data-tab="service">售后政策</div>
+                        <div class="tab" data-tab="security">防骗提醒</div>
+                    </div>
+                    
+                    <div class="tab-content" id="paymentContent">
+                        <p>建议支付渠道：USDT > 支付宝 > 微信</p>
+                        <p style="font-size: 0.7rem; color: #888; margin-top: 5px;">支付渠道:USDT.支付宝.微信全部zc</p>
+                    </div>
+                    
+                    <div class="tab-content" id="serviceContent" style="display: none;">
+                        <p>本站不提供任何担保，私下交易被骗一律与本站无关</p>
+                        <p style="font-size: 0.7rem; color: #888; margin-top: 5px;">有售后需求请在tg上面联系小yi，如投诉收款账户全平台拉黑</p>
+                    </div>
+                    
+                    <div class="tab-content" id="securityContent" style="display: none;">
+                        <p>警惕脱离平台交易，遇到脱离正规交易平台的信息，切勿轻信</p>
+                        <p style="font-size: 0.7rem; color: #888; margin-top: 5px;">请谨慎交易，保护好自己的财产安全</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>小yi防红•专业防红技术</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 点击特效
+        document.addEventListener('click', function(e) {
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.style.left = e.clientX - 10 + 'px';
+            effect.style.top = e.clientY - 10 + 'px';
+            document.body.appendChild(effect);
+            
+            setTimeout(() => {
+                effect.remove();
+            }, 600);
+        });
+        
+        // 协议勾选逻辑
+        const agreeCheck = document.getElementById('agreeCheck');
+        const nextStepBtn = document.getElementById('nextStepBtn');
+        
+        agreeCheck.addEventListener('click', function() {
+            this.classList.toggle('checked');
+            nextStepBtn.disabled = !this.classList.contains('checked');
+            
+            if (!nextStepBtn.disabled) {
+                nextStepBtn.classList.add('pulse');
+            } else {
+                nextStepBtn.classList.remove('pulse');
+            }
+        });
+        
+        // 下一步按钮点击事件
+        nextStepBtn.addEventListener('click', function() {
+            if (this.disabled) return;
+            
+            // 显示加载效果
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 跳转中...';
+            this.disabled = true;
+            
+            // 模拟跳转延迟
+            setTimeout(() => {
+                window.location.href = 'fh.php';
+            }, 1500);
+        });
+        
+        // 标签切换功能
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                tabs.forEach(t => t.classList.remove('active'));
+                // 添加active类到当前标签
+                this.classList.add('active');
+                
+                // 隐藏所有内容
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                // 显示对应内容
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId + 'Content').style.display = 'block';
+            });
+        });
+        
+        // 添加一些视觉增强效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加轻微浮动动画到卡片
+            const card = document.querySelector('.card');
+            setInterval(() => {
+                card.style.transform = 'translateY(-1px)';
+                setTimeout(() => {
+                    card.style.transform = 'translateY(0)';
+                }, 1000);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
